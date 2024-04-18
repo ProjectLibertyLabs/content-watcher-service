@@ -1,6 +1,6 @@
 {
   "name": "content-watcher-service",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "description": "Services to publish content on DSNP/Frequency",
   "main": "dist/apps/api/main.js",
   "scripts": {
@@ -8,10 +8,11 @@
     "build:swagger": "npx ts-node apps/api/src/generate-metadata.ts",
     "generate-swagger-ui": "redoc-cli bundle swagger.yaml --output=./docs/index.html",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
-    "start:api": "nest start api",
-    "start:api:prod": "node dist/apps/api/main.js",
-    "start:api:dev": "set -a ; . .env ; nest start api",
-    "start:api:debug": "set -a ; . .env ; nest start api --debug --watch",
+    "start": "nest start api",
+    "start:watch": "nest start api --watch",
+    "start:prod": "node dist/apps/api/main.js",
+    "start:dev": "set -a ; . .env ; nest start api",
+    "start:debug": "set -a ; . .env ; nest start api --debug --watch",
     "docker-build": "docker build -t content-watcher-service .",
     "docker-build:dev": "docker-compose -f docker-compose.dev.yaml build",
     "docker-run": " build -t content-watcher-service-deploy . ; docker run -p 6379:6379 --env-file .env content-watcher-service-deploy",
