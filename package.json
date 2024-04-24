@@ -62,7 +62,7 @@
     "@nestjs/testing": "^9.4.0",
     "@nestjs/typeorm": "^9.0.1",
     "@polkadot/api": "^10.9.1",
-    "@polkadot/api-base": "^10.9.1",
+    "@polkadot/api-base": "^11.0.2",
     "@polkadot/keyring": "^12.3.2",
     "@polkadot/types": "^10.9.1",
     "@polkadot/util": "^12.3.2",
