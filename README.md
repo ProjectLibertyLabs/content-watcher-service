@@ -35,7 +35,7 @@ Since running a full stack supporting the content-watcher service necessitates h
 ### 3. Start the service:
 Run the following command to start the service:
 ```bash
-docker-compose -f docker-compose.dev.yaml up
+docker-compose up -d
 ```
 
 ## Testing
