@@ -9,7 +9,7 @@ import { ScannerService } from '../../../libs/common/src/scanner/scanner';
 import { EVENTS_TO_WATCH_KEY, LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY, REGISTERED_WEBHOOK_KEY } from '../../../libs/common/src/constants';
 import { ChainWatchOptionsDto } from '../../../libs/common/src/dtos/chain.watch.dto';
 import { WebhookRegistrationDto } from '../../../libs/common/src/dtos/subscription.webhook.dto';
-import * as RedisUtils  from '../../../libs/common/src/utils/redis';
+import * as RedisUtils from '../../../libs/common/src/utils/redis';
 
 @Injectable()
 export class ApiService {

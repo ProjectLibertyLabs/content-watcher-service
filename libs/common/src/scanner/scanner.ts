@@ -16,7 +16,7 @@ import * as QueueConstants from '../utils/queues';
 import { EVENTS_TO_WATCH_KEY, LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY, REGISTERED_WEBHOOK_KEY } from '../constants';
 import { ChainWatchOptionsDto } from '../dtos/chain.watch.dto';
 import { createIPFSQueueJob } from '../interfaces/ipfs.job.interface';
-import * as  RedisUtils  from '../utils/redis';
+import * as RedisUtils from '../utils/redis';
 import { MessageResponseWithSchemaId } from '../interfaces/announcement_response';
 
 @Injectable()
