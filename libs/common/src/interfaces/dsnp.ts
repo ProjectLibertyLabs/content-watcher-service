@@ -15,45 +15,45 @@ export enum AnnouncementType {
   PublicFollows = 113,
 }
 
-interface TombstoneFields {
+type TombstoneFields = {
   announcementType: AnnouncementType.Tombstone;
   targetAnnouncementType: AnnouncementType;
   targetContentHash: string;
-}
+};
 
-interface BroadcastFields {
+type BroadcastFields = {
   announcementType: AnnouncementType.Broadcast;
   contentHash: string;
   url: string;
-}
+};
 
-interface ReplyFields {
+type ReplyFields = {
   announcementType: AnnouncementType.Reply;
   contentHash: string;
   inReplyTo: string;
   url: string;
-}
+};
 
-interface ReactionFields {
+type ReactionFields = {
   announcementType: AnnouncementType.Reaction;
   emoji: string;
   inReplyTo: string;
   apply: number;
-}
+};
 
-interface ProfileFields {
+type ProfileFields = {
   announcementType: AnnouncementType.Profile;
   contentHash: string;
   url: string;
-}
+};
 
-interface UpdateFields {
+type UpdateFields = {
   announcementType: AnnouncementType.Update;
   contentHash: string;
   targetAnnouncementType: AnnouncementType;
   targetContentHash: string;
   url: string;
-}
+};
 
 /**
  * TypedAnnouncement: an Announcement with a particular AnnouncementType
