@@ -1,7 +1,7 @@
 import { createHash } from 'crypto';
 import { AnnouncementTypeDto } from '../dtos/common.dto';
 
-export namespace QueueConstants {
+
   /**
    * Name of the queue that has all incoming IPFS messages from the blockchain
    */
@@ -44,7 +44,7 @@ export namespace QueueConstants {
     [PROFILE_QUEUE_NAME, AnnouncementTypeDto.PROFILE],
     [UPDATE_QUEUE_NAME, AnnouncementTypeDto.UPDATE],
   ]);
-}
+
 
 export const calculateJobId = (jobWithoutId: any): string => {
   const stringVal = JSON.stringify(jobWithoutId);

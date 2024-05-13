@@ -1,4 +1,4 @@
-export namespace RedisUtils {
+
   /**
    * 45 days upper limit to avoid keeping abandoned data forever
    */
@@ -48,4 +48,3 @@ export namespace RedisUtils {
   export function getNonceKey(suffix: string) {
     return `${CHAIN_NONCE_KEY}:${suffix}`;
   }
-}
