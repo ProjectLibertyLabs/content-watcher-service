@@ -1,15 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { createHash } from 'crypto';
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { InjectRedis } from '@songkeys/nestjs-redis';
 import Redis from 'ioredis';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { ContentSearchRequestDto, QueueConstants, calculateJobId } from '../../../libs/common/src';
+import { ContentSearchRequestDto, REQUEST_QUEUE_NAME, calculateJobId } from '../../../libs/common/src';
 import { ScannerService } from '../../../libs/common/src/scanner/scanner';
 import { EVENTS_TO_WATCH_KEY, LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY, REGISTERED_WEBHOOK_KEY } from '../../../libs/common/src/constants';
 import { ChainWatchOptionsDto } from '../../../libs/common/src/dtos/chain.watch.dto';
 import { WebhookRegistrationDto } from '../../../libs/common/src/dtos/subscription.webhook.dto';
-import { RedisUtils } from '../../../libs/common/src/utils/redis';
+import * as RedisUtils from '../../../libs/common/src/utils/redis';
 
 @Injectable()
 export class ApiService {
@@ -17,7 +16,7 @@ export class ApiService {
 
   constructor(
     @InjectRedis() private redis: Redis,
-    @InjectQueue(QueueConstants.REQUEST_QUEUE_NAME) private requestQueue: Queue,
+    @InjectQueue(REQUEST_QUEUE_NAME) private requestQueue: Queue,
     private readonly scannerService: ScannerService,
   ) {
     this.logger = new Logger(this.constructor.name);
@@ -64,8 +63,7 @@ export class ApiService {
   }
 
   public async setWebhook(webhookRegistration: WebhookRegistrationDto) {
-    const webhookId = createHash('sha256').update(webhookRegistration.url).digest('hex');
-    this.logger.debug(`Setting webhook ${webhookId} to ${JSON.stringify(webhookRegistration)}`);
+    this.logger.debug(`Registering webhook ${JSON.stringify(webhookRegistration)}`);
     const currentRegistedWebooks = await this.redis.get(REGISTERED_WEBHOOK_KEY);
 
     let currentWebhookRegistrationDtos: { announcementType: string; urls: string[] }[] = [];
@@ -73,12 +71,14 @@ export class ApiService {
       currentWebhookRegistrationDtos = JSON.parse(currentRegistedWebooks);
     }
 
-    webhookRegistration.announcementTypes.forEach((announcementType) => {
-      const index = currentWebhookRegistrationDtos.findIndex((webhookRegistrationDto) => webhookRegistrationDto.announcementType === announcementType.toLowerCase());
-      if (index === -1) {
+    webhookRegistration.announcementTypes.map((a) => a.toLowerCase()).forEach((announcementType) => {
+      const existingRegistration = currentWebhookRegistrationDtos.find((currentWebhookRegistration) => currentWebhookRegistration.announcementType === announcementType);
+      if (!existingRegistration) {
         currentWebhookRegistrationDtos.push({ announcementType: announcementType.toLowerCase(), urls: [webhookRegistration.url] });
       } else {
-        currentWebhookRegistrationDtos[index].urls.push(webhookRegistration.url);
+        const urls = new Set(existingRegistration.urls);
+        urls.add(webhookRegistration.url);
+        existingRegistration.urls = [...urls];
       }
     });
 
