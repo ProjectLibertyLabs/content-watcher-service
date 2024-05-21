@@ -22,9 +22,9 @@ export class ApiService {
     this.logger = new Logger(this.constructor.name);
   }
 
-  public setLastSeenBlockNumber(blockNumber: bigint) {
+  public setLastSeenBlockNumber(blockNumber: number) {
     this.logger.warn(`Setting last seen block number to ${blockNumber}`);
-    return this.redis.setex(LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY, RedisUtils.STORAGE_EXPIRE_UPPER_LIMIT_SECONDS, blockNumber.toString());
+    return this.redis.setex(LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY, RedisUtils.STORAGE_EXPIRE_UPPER_LIMIT_SECONDS, blockNumber);
   }
 
   public async setWatchOptions(watchOptions: ChainWatchOptionsDto) {

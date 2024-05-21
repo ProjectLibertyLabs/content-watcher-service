@@ -15,6 +15,7 @@ import { EVENTS_TO_WATCH_KEY, LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY, REGISTERED_WEB
 import { ChainWatchOptionsDto } from '../dtos/chain.watch.dto';
 import * as RedisUtils from '../utils/redis';
 import { ChainEventProcessorService } from '../blockchain/chain-event-processor.service';
+import { IScanReset } from '../interfaces/scan-reset.interface';
 
 @Injectable()
 export class ScannerService implements OnApplicationBootstrap {
@@ -23,6 +24,7 @@ export class ScannerService implements OnApplicationBootstrap {
   private scanInProgress = false;
 
   private paused = false;
+  private currentScanPromise: Promise<void> = Promise.resolve();
 
   constructor(
     private readonly configService: ConfigService,
@@ -64,7 +66,21 @@ export class ScannerService implements OnApplicationBootstrap {
     this.paused = false;
   }
 
+  public async resetScan({ blockNumber, rewindOffset }: IScanReset) {
+    this.pauseScanner();
+    let targetBlock = blockNumber ?? await this.blockchainService.getLatestFinalizedBlockNumber();
+    targetBlock -= rewindOffset ? Math.abs(rewindOffset) : 0;
+    targetBlock = Math.max(targetBlock, 1);
+    this.setLastSeenBlockNumber(targetBlock - 1);
+    this.resumeScanner();
+  }
+
+  public get currentScan(): Promise<void> {
+    return this.currentScanPromise;
+  }
+
   async scan() {
+    let resolveCurrentScan = () => {};
     try {
       this.logger.debug('Starting scanner');
 
@@ -92,7 +108,6 @@ export class ScannerService implements OnApplicationBootstrap {
       const chainWatchFilters = await this.cache.get(EVENTS_TO_WATCH_KEY);
       const eventsToWatch: ChainWatchOptionsDto = chainWatchFilters ? JSON.parse(chainWatchFilters) : { msa_ids: [], schemaIds: [] };
 
-      this.scanInProgress = true;
       let lastScannedBlock = await this.getLastSeenBlockNumber();
       const currentBlockNumber = lastScannedBlock + 1;
       let currentBlockHash = await this.blockchainService.getBlockHash(currentBlockNumber);
@@ -102,6 +117,11 @@ export class ScannerService implements OnApplicationBootstrap {
         this.scanInProgress = false;
         return;
       }
+
+      this.scanInProgress = true;
+      this.currentScanPromise = new Promise((resolve) => {
+        resolveCurrentScan = resolve;
+      });
       this.logger.log(`Starting scan from block #${currentBlockNumber} (${currentBlockHash})`);
 
       while (!this.paused && !currentBlockHash.isEmpty && queueSize < this.configService.queueHighWater) {
@@ -124,6 +144,7 @@ export class ScannerService implements OnApplicationBootstrap {
       this.logger.error(err);
     } finally {
       this.scanInProgress = false;
+      resolveCurrentScan();
     }
   }
 

@@ -27,7 +27,8 @@ export class ApiController {
     type: ResetScannerDto,
   })
   resetScanner(@Body() resetScannerDto: ResetScannerDto) {
-    return this.apiService.setLastSeenBlockNumber(BigInt(resetScannerDto.blockNumber ?? 0n));
+    let blockNumber = 0;
+    return this.apiService.setLastSeenBlockNumber(blockNumber);
   }
 
   @Post('setWatchOptions')
