@@ -2,8 +2,6 @@ const { options } = require('@frequency-chain/api-augment');
 const { WsProvider, ApiPromise, Keyring } = require('@polkadot/api');
 const { deploy } = require('@dsnp/frequency-schemas/cli/deploy');
 
-const PROVIDER_ACCOUNT_SEED_PHRASE = 'come finish flower cinnamon blame year glad tank domain hunt release fatigue';
-
 // Given a list of events, a section and a method,
 // returns the first event with matching section and method.
 const eventWithSectionAndMethod = (events, section, method) => {
