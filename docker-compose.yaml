@@ -48,20 +48,9 @@ services:
       - 3001:3000
     env_file:
       - .env.docker.dev
+      - .env.content-publishing-service
     environment:
       - START_PROCESS=api
-      - CHAIN_ENVIRONMENT=dev
-      - PROVIDER_ID=1
-      - PROVIDER_ACCOUNT_SEED_PHRASE=//Alice
-      - FILE_UPLOAD_MAX_SIZE_IN_BYTES=10000000 # ~10Mb
-      - ASSET_EXPIRATION_INTERVAL_SECONDS=300
-      - BATCH_INTERVAL_SECONDS=12
-      - BATCH_MAX_COUNT=1000
-      - ASSET_UPLOAD_VERIFICATION_DELAY_SECONDS=5
-      - CAPACITY_LIMIT={"type":"percentage", "value":80}
-      - REDIS_URL=redis://redis:6379
-      - FREQUENCY_URL=ws://frequency:9944
-      - IPFS_ENDPOINT=http://ipfs:5001
     depends_on:
       - redis
       - frequency
@@ -75,20 +64,9 @@ services:
     platform: linux/amd64
     env_file:
       - .env.docker.dev
+      - .env.content-publishing-service
     environment:
       - START_PROCESS=worker
-      - CHAIN_ENVIRONMENT=dev
-      - PROVIDER_ID=1
-      - PROVIDER_ACCOUNT_SEED_PHRASE=//Alice
-      - FILE_UPLOAD_MAX_SIZE_IN_BYTES=10000000 # ~10Mb
-      - ASSET_EXPIRATION_INTERVAL_SECONDS=300
-      - BATCH_INTERVAL_SECONDS=12
-      - BATCH_MAX_COUNT=1000
-      - ASSET_UPLOAD_VERIFICATION_DELAY_SECONDS=5
-      - CAPACITY_LIMIT={"type":"percentage", "value":80}
-      - REDIS_URL=redis://redis:6379
-      - FREQUENCY_URL=ws://frequency:9944
-      - IPFS_ENDPOINT=http://ipfs:5001
     depends_on:
       - redis
       - frequency
