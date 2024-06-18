@@ -1,5 +1,11 @@
-
 import axios from 'axios';
+
+// Use random strings and emoji each run so that the content is new each time
+const randomString = Array(10)
+  .fill(null)
+  .map(() => Math.round(Math.random() * 16).toString(16))
+  .join('');
+const randomEmoji = String.fromCodePoint(Math.floor(Math.random() * (0x1f57f - 0x1f519 + 1)) + 0x1f519);
 
 const validLocation = {
   name: 'name of location',
@@ -80,7 +86,7 @@ const postReaction = async (dsnpUserId, reaction) => {
 };
 
 const main = async () => {
-  const dsnpUserId = '123'; // Replace with the desired user ID
+  const dsnpUserId = '1'; // Replace with the desired user ID
 
   // Example: Post broadcast
   const broadcastResponse = await postBroadcast(dsnpUserId, validBroadCastNoUploadedAssets);

@@ -29,7 +29,7 @@ services:
     volumes:
       - chainstorage:/data
 
-  kubo_ipfs:
+  ipfs:
     image: ipfs/kubo:latest
     ports:
       - 4001:4001
@@ -50,10 +50,22 @@ services:
       - .env.docker.dev
     environment:
       - START_PROCESS=api
+      - CHAIN_ENVIRONMENT=dev
+      - PROVIDER_ID=1
+      - PROVIDER_ACCOUNT_SEED_PHRASE=//Alice
+      - FILE_UPLOAD_MAX_SIZE_IN_BYTES=10000000 # ~10Mb
+      - ASSET_EXPIRATION_INTERVAL_SECONDS=300
+      - BATCH_INTERVAL_SECONDS=12
+      - BATCH_MAX_COUNT=1000
+      - ASSET_UPLOAD_VERIFICATION_DELAY_SECONDS=5
+      - CAPACITY_LIMIT={"type":"percentage", "value":80}
+      - REDIS_URL=redis://redis:6379
+      - FREQUENCY_URL=ws://frequency:9944
+      - IPFS_ENDPOINT=http://ipfs:5001
     depends_on:
       - redis
       - frequency
-      - kubo_ipfs
+      - ipfs
     networks:
       - content-watcher-service
 
@@ -65,10 +77,22 @@ services:
       - .env.docker.dev
     environment:
       - START_PROCESS=worker
+      - CHAIN_ENVIRONMENT=dev
+      - PROVIDER_ID=1
+      - PROVIDER_ACCOUNT_SEED_PHRASE=//Alice
+      - FILE_UPLOAD_MAX_SIZE_IN_BYTES=10000000 # ~10Mb
+      - ASSET_EXPIRATION_INTERVAL_SECONDS=300
+      - BATCH_INTERVAL_SECONDS=12
+      - BATCH_MAX_COUNT=1000
+      - ASSET_UPLOAD_VERIFICATION_DELAY_SECONDS=5
+      - CAPACITY_LIMIT={"type":"percentage", "value":80}
+      - REDIS_URL=redis://redis:6379
+      - FREQUENCY_URL=ws://frequency:9944
+      - IPFS_ENDPOINT=http://ipfs:5001
     depends_on:
       - redis
       - frequency
-      - kubo_ipfs
+      - ipfs
     networks:
       - content-watcher-service
 
@@ -82,12 +106,14 @@ services:
         - content-watcher-service:latest
     env_file:
       - .env.docker.dev
+    ports:
+      - 3000:3000
     volumes:
       - ./:/app
     depends_on:
       - redis
       - frequency
-      - kubo_ipfs
+      - ipfs
       - content-publishing-service-api
       - content-publishing-service-worker
     networks:
