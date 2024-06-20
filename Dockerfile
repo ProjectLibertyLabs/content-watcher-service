@@ -69,4 +69,4 @@ COPY --from=build /app/dist ./dist
 EXPOSE 3000
 
 # Run the application.
-CMD node dist/apps/api/main.js
+ENTRYPOINT ["/usr/bin/tini", "--", "node", "dist/apps/api/main.js"]

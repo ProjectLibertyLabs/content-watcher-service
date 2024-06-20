@@ -19,4 +19,4 @@ USER node
 EXPOSE 3000
 
 # Run the application.
-CMD npm i && npm run start:api:watch
+ENTRYPOINT [ "npm", "run", "start:api:watch" ]
