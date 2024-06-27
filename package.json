@@ -40,7 +40,7 @@
   "homepage": "https://github.com/AmplicaLabs/content-watcher-service#readme",
   "dependencies": {
     "@bull-board/api": "^5.17.1",
-    "@bull-board/express": "^5.17.1",
+    "@bull-board/express": "^5.20.5",
     "@bull-board/nestjs": "^5.17.1",
     "@bull-board/ui": "^5.17.1",
     "@dsnp/activity-content": "^1.1.0",
