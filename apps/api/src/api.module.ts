@@ -13,8 +13,8 @@ import { CrawlerModule } from '@libs/common/crawler/crawler.module';
 import { IPFSProcessorModule } from '@libs/common/ipfs/ipfs.module';
 import { PubSubModule } from '@libs/common/pubsub/pubsub.module';
 import { ScannerModule } from '@libs/common/scanner/scanner.module';
-import { ConfigModule } from '@libs/common/config/config.module'
-import { ConfigService } from '@libs/common/config/config.service'
+import { ConfigModule } from '@libs/common/config/config.module';
+import { ConfigService } from '@libs/common/config/config.service';
 import * as QueueConstants from '@libs/common';
 
 @Module({

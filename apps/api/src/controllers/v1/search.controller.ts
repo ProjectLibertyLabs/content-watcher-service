@@ -7,7 +7,6 @@ import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 @Controller('v1/search')
 @ApiTags('v1/search')
 export class SearchControllerV1 {
-
   constructor(private readonly apiService: ApiService) {}
 
   @Post()
