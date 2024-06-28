@@ -5,7 +5,7 @@ import { ResetScannerDto } from '@libs/common';
 import { ChainWatchOptionsDto } from '@libs/common/dtos/chain.watch.dto';
 
 @Controller('v1/scanner')
-@ApiTags('scanner')
+@ApiTags('v1/scanner')
 export class ScanControllerV1 {
   private readonly logger: Logger;
 
