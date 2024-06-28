@@ -159,7 +159,9 @@ import * as QueueConstants from '@libs/common';
     ScheduleModule.forRoot(),
   ],
   providers: [ApiService],
-  controllers: [HealthController, ScanControllerV1, SearchControllerV1, WebhookControllerV1],
+  // Controller order determines the order of display for docs
+  // v[Desc first][ABC Second], Health, and then Dev only last
+  controllers: [ScanControllerV1, SearchControllerV1, WebhookControllerV1, HealthController],
   exports: [],
 })
 export class ApiModule {}
