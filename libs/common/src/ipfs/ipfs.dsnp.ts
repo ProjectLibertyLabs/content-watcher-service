@@ -4,9 +4,9 @@ import { InjectQueue, Processor } from '@nestjs/bullmq';
 import { hexToString } from '@polkadot/util';
 import parquet from '@dsnp/parquetjs';
 import { bases } from 'multiformats/basics';
-import { ConfigService } from '../config/config.service';
+import { AppConfigService } from '../config/config.service';
 import { calculateJobId } from '..';
-import * as QueueConstants from '../utils/queues';
+import * as QueueConstants from '../queues/queue-constants';
 import { IIPFSJob } from '../interfaces/ipfs.job.interface';
 import { BaseConsumer } from '../utils/base-consumer';
 import { IpfsService } from '../utils/ipfs.client';
@@ -35,7 +35,7 @@ export class IPFSContentProcessor extends BaseConsumer {
     @InjectQueue(QueueConstants.REPLY_QUEUE_NAME) private replyQueue: Queue,
     @InjectQueue(QueueConstants.PROFILE_QUEUE_NAME) private profileQueue: Queue,
     @InjectQueue(QueueConstants.UPDATE_QUEUE_NAME) private updateQueue: Queue,
-    private configService: ConfigService,
+    private configService: AppConfigService,
     private ipfsService: IpfsService,
   ) {
     super();
@@ -87,7 +87,7 @@ export class IPFSContentProcessor extends BaseConsumer {
             blockNumber: blockNumer,
             announcement: {
               fromId: recordAnnouncement.fromId,
-              contentHash: bases.base58btc.encode(recordAnnouncement.contentHash as any),
+              contentHash: bases.base16.encode(recordAnnouncement.contentHash as any),
               url: recordAnnouncement.url,
               announcementType: recordAnnouncement.announcementType,
             },

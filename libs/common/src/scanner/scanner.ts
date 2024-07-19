@@ -6,11 +6,11 @@ import { InjectQueue } from '@nestjs/bullmq';
 import Redis from 'ioredis';
 import { InjectRedis } from '@songkeys/nestjs-redis';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { MILLISECONDS_PER_SECOND, SECONDS_PER_MINUTE } from 'time-constants';
+import { MILLISECONDS_PER_SECOND } from 'time-constants';
 import { Queue } from 'bullmq';
-import { ConfigService } from '../config/config.service';
+import { AppConfigService } from '../config/config.service';
 import { BlockchainService } from '../blockchain/blockchain.service';
-import * as QueueConstants from '../utils/queues';
+import * as QueueConstants from '../queues/queue-constants';
 import { EVENTS_TO_WATCH_KEY, LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY, REGISTERED_WEBHOOK_KEY } from '../constants';
 import { ChainWatchOptionsDto } from '../dtos/chain.watch.dto';
 import * as RedisUtils from '../utils/redis';
@@ -28,7 +28,7 @@ export class ScannerService implements OnApplicationBootstrap, OnApplicationShut
   private scanResetBlockNumber: number | undefined;
 
   constructor(
-    private readonly configService: ConfigService,
+    private readonly configService: AppConfigService,
     private readonly blockchainService: BlockchainService,
     @InjectRedis() private readonly cache: Redis,
     @InjectQueue(QueueConstants.IPFS_QUEUE) private readonly ipfsQueue: Queue,
@@ -54,8 +54,9 @@ export class ScannerService implements OnApplicationBootstrap, OnApplicationShut
   }
 
   onApplicationShutdown(_signal?: string | undefined) {
-    const interval = this.schedulerRegistry.getInterval(INTERVAL_SCAN_NAME);
-    clearInterval(interval);
+    if (this.schedulerRegistry.doesExist('interval', INTERVAL_SCAN_NAME)) {
+      clearInterval(this.schedulerRegistry.getInterval(INTERVAL_SCAN_NAME));
+    }
   }
 
   public pauseScanner() {

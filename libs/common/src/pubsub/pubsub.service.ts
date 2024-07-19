@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 import axios from 'axios';
 import { MILLISECONDS_PER_SECOND } from 'time-constants';
 import { EVENTS_TO_WATCH_KEY, REGISTERED_WEBHOOK_KEY } from '../constants';
-import { ConfigService } from '../config/config.service';
+import { AppConfigService } from '../config/config.service';
 import { ChainWatchOptionsDto } from '../dtos/chain.watch.dto';
 import { AnnouncementResponse } from '../types/content-announcement';
 
@@ -14,7 +14,7 @@ export class PubSubService {
 
   constructor(
     @InjectRedis() private redis: Redis,
-    private readonly configService: ConfigService,
+    private readonly configService: AppConfigService,
   ) {
     this.logger = new Logger(this.constructor.name);
   }

@@ -4,7 +4,7 @@ import { InjectQueue, Processor } from '@nestjs/bullmq';
 import Redis from 'ioredis';
 import { InjectRedis } from '@songkeys/nestjs-redis';
 import { Job, Queue } from 'bullmq';
-import * as QueueConstants from '../utils/queues';
+import * as QueueConstants from '../queues/queue-constants';
 import { ChainWatchOptionsDto } from '../dtos/chain.watch.dto';
 import { BaseConsumer } from '../utils/base-consumer';
 import { ContentSearchRequestDto } from '../dtos/request-job.dto';
