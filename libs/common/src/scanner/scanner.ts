@@ -102,6 +102,7 @@ export class ScannerService implements OnApplicationBootstrap, OnApplicationShut
       this.scanInProgress = true;
 
       let first = true;
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         if (this.paused) {
           this.logger.log('Scan paused');

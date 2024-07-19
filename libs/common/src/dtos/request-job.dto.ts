@@ -1,16 +1,17 @@
-import { IsInt, IsOptional, IsPositive, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsPositive, IsString, IsUrl } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ChainWatchOptionsDto } from './chain.watch.dto';
 
 export class ContentSearchRequestDto {
   @IsOptional()
   @IsString()
-  id: string;
+  clientReferenceId: string;
 
+  @IsOptional()
   @IsInt()
   @IsPositive()
   @ApiProperty({
-    description: 'The starting block number to search from',
+    description: 'The block number to search (backward) from',
     example: 100,
   })
   startBlock: number;
@@ -18,14 +19,17 @@ export class ContentSearchRequestDto {
   @IsInt()
   @IsPositive()
   @ApiProperty({
-    description: 'The ending block number to search to',
+    description: 'The number of blocks to scan (backwards)',
     example: 101,
   })
-  endBlock: number;
+  blockCount: number;
 
   @IsOptional()
   @ApiProperty({
     description: 'The schemaIds/dsnpIds to filter by',
   })
   filters: ChainWatchOptionsDto;
+
+  @IsUrl({ require_tld: false })
+  webhookUrl: string;
 }
