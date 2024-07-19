@@ -39,10 +39,6 @@ export class ScannerService implements OnApplicationBootstrap, OnApplicationShut
   }
 
   async onApplicationBootstrap() {
-    await this.blockchainService.isReady();
-    const startingBlock = await this.blockchainService.getLatestFinalizedBlockNumber();
-    this.logger.log(`Setting initial scan block to ${startingBlock}`);
-    this.setLastSeenBlockNumber(startingBlock - 1);
     setImmediate(() => this.scan());
 
     const scanInterval = this.configService.blockchainScanIntervalSeconds * MILLISECONDS_PER_SECOND;
@@ -144,7 +140,12 @@ export class ScannerService implements OnApplicationBootstrap, OnApplicationShut
       nextBlock = this.scanResetBlockNumber;
       this.scanResetBlockNumber = undefined;
     } else {
-      nextBlock = (Number(await this.cache.get(LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY)) ?? 0) + 1;
+      nextBlock = Number((await this.cache.get(LAST_SEEN_BLOCK_NUMBER_SCANNER_KEY)) ?? '0');
+      if (!nextBlock) {
+        nextBlock = await this.blockchainService.getLatestFinalizedBlockNumber();
+      }
+
+      nextBlock += 1;
     }
 
     return nextBlock;

@@ -20,7 +20,7 @@ export function createIPFSQueueJob(
   webhookUrl?: string,
 ): { key: string; data: IIPFSJob } {
   return {
-    key: `${msaId}:${providerId}:${index}:${requestId}`,
+    key: `${msaId}:${providerId}:${blockNumber}:${index}:${requestId}`,
     data: {
       msaId,
       providerId,
