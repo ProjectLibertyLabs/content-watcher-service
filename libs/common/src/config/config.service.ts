@@ -9,7 +9,6 @@ export interface ConfigEnvironmentVariables {
   IPFS_BASIC_AUTH_SECRET: string;
   REDIS_URL: URL;
   FREQUENCY_URL: URL;
-  STARTING_BLOCK: string;
   BLOCKCHAIN_SCAN_INTERVAL_SECONDS: number;
   QUEUE_HIGH_WATER: number;
   WEBHOOK_FAILURE_THRESHOLD: number;
@@ -37,10 +36,6 @@ export class AppConfigService {
 
   public get frequencyUrl(): URL {
     return this.nestConfigService.get('FREQUENCY_URL')!;
-  }
-
-  public get startingBlock(): number | undefined {
-    return this.nestConfigService.get<number>('STARTING_BLOCK')!;
   }
 
   public get blockchainScanIntervalSeconds(): number {

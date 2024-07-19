@@ -10,7 +10,6 @@ export const configModuleOptions: ConfigModuleOptions = {
     IPFS_BASIC_AUTH_SECRET: Joi.string().allow('').default(''),
     REDIS_URL: Joi.string().uri().required(),
     FREQUENCY_URL: Joi.string().uri().required(),
-    STARTING_BLOCK: Joi.number().min(1),
     BLOCKCHAIN_SCAN_INTERVAL_SECONDS: Joi.number().min(1).default(12),
     QUEUE_HIGH_WATER: Joi.number().min(100).default(1000),
     WEBHOOK_FAILURE_THRESHOLD: Joi.number().min(0).default(3),

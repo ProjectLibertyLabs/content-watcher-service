@@ -39,11 +39,10 @@ export class ScannerService implements OnApplicationBootstrap, OnApplicationShut
   }
 
   async onApplicationBootstrap() {
-    const startingBlock = this.configService.startingBlock;
-    if (startingBlock) {
-      this.logger.log(`Setting initial scan block to ${startingBlock}`);
-      this.setLastSeenBlockNumber(startingBlock - 1);
-    }
+    await this.blockchainService.isReady();
+    const startingBlock = await this.blockchainService.getLatestFinalizedBlockNumber();
+    this.logger.log(`Setting initial scan block to ${startingBlock}`);
+    this.setLastSeenBlockNumber(startingBlock - 1);
     setImmediate(() => this.scan());
 
     const scanInterval = this.configService.blockchainScanIntervalSeconds * MILLISECONDS_PER_SECOND;
@@ -84,18 +83,15 @@ export class ScannerService implements OnApplicationBootstrap, OnApplicationShut
 
   async scan() {
     try {
-      this.logger.debug('Starting scanner');
-
       if (this.scanInProgress) {
-        this.logger.debug('Scan already in progress');
         return;
       }
 
       const registeredWebhook = await this.cache.get(REGISTERED_WEBHOOK_KEY);
       if (!registeredWebhook) {
-        this.logger.log('No registered webhooks; no scan performed.');
         return;
       }
+      this.logger.debug('Starting scanner');
       const chainWatchFilters = await this.cache.get(EVENTS_TO_WATCH_KEY);
       const eventsToWatch: ChainWatchOptionsDto = chainWatchFilters ? JSON.parse(chainWatchFilters) : { msa_ids: [], schemaIds: [] };
 
